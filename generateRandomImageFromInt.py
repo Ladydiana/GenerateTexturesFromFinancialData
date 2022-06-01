@@ -19,5 +19,5 @@ for r in range(0,300):
         bl = random.randint(0, 255)
         im[r][c]=[re,gr,bl]
 img = Image.fromarray(im, 'RGB')
-
 img.show()
+img.save("random.jpeg");
