@@ -57,9 +57,8 @@ class DrawImage(HistoricalData):
                 gr = self._data['Close'][c]
                 bl = self._data['High'][r]#365#data['Close'][r]
                 self._img[r][c]=[re,gr,bl]
-        img = Image.fromarray(self._img, 'RGB')
+        img = Image.fromarray(self._img, 'RGB').convert("L")
         img.show()
-        
         img.save("randomFin_" + datetime.now().strftime('%Y%m%d%H%M%S') +".jpeg");
         
 
