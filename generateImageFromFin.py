@@ -69,10 +69,10 @@ class DrawImage(HistoricalData):
                 bl = self._data['High'][r]#365#data['Close'][r]
                 self._img[r][c]=[re,gr,bl]
         img = Image.fromarray(self._img, 'RGB')
-        img.save("textures/" + _dt + "_color" + ".jpeg")
+        img.save("textures/" + _dt + "_" + self._ticker + "_" + self._period + "_color" + ".jpeg")
         img = img.convert("L")
         img.show()
-        img.save("textures/" + _dt + "_bw" +".jpeg");
+        img.save("textures/" + _dt + "_" + self._ticker + "_" + self._period + "_bw" +".jpeg");
         
 
 obj = DrawImage(512, "NVDA")
