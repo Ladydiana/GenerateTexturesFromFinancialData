@@ -44,38 +44,41 @@ class Utils:
 class DrawImage(HistoricalData):
 
     #protected data memebers
-    _size = "";
+    _imgSize = "";
     _img= "";
     
     # constructor
     def __init__(self, size, ticker): 
-        self._size = size
-        self._img = np.array(Image.new("RGB", (size,size)))
+        self._imgSize = int(size/2)
+        self._img = np.array(Image.new("RGBA", (self._imgSize,self._imgSize)))
         HistoricalData.__init__(self, ticker, str(size)+"d") 
         self.loadData()
     
     def getValues(self):
-        print("Ticker: ", self._ticker, "; Image Size: ", self._size);
+        print("Ticker: ", self._ticker, "; Data period: " , self._period, "d", "; Image Size: ", self._imgSize);
         print(self._data.info())
         
 
-    def draw(self):
+    def drawRGBA(self, red, green, blue, alpha):
         _dt = Utils.getCurrentDatetime()
-        for r in range(0, self._size):
-            for c in range(0, self._size):
-                #print( data['Open'][r], data['Close'][c], data['High'][r] )
-                re = self._data['Open'][r]
-                gr = self._data['Close'][c]
-                bl = self._data['High'][r]#365#data['Close'][r]
-                self._img[r][c]=[re,gr,bl]
-        img = Image.fromarray(self._img, 'RGB')
+        _prefix = "RGBA"
+        for r in range(0, self._imgSize):
+            for c in range(0, self._imgSize):
+                #print( data['Open'][r], data['Open'][c],data['Close'][c], data['High'][r] )
+                #print( self._data['Open'][r], "-", self._data['Open'][c])
+                re = self._data[red][r+c]
+                gr = self._data[green][r+c]
+                bl = self._data[blue][r+c]#365#data['Close'][r]
+                a = self._data[alpha][r+c]#365#data['Close'][r]
+                self._img[r][c]=[re,gr,bl, a]
+        img = Image.fromarray(self._img, 'RGBA')
         
-        img.save("textures/" + _dt + "_" + self._ticker + "_" + self._period + "OCH_color" + ".png") #OCH = Open Close High
+        img.save("textures/" +  self._ticker + "_" + self._period + "OCH_color_" + _prefix + "_" + _dt + ".png") #OCH = Open Close High
         img = img.convert("L")
         img.show()
-        img.save("textures/" + _dt + "_" + self._ticker + "_" + self._period + "OCH_bw" +".png");
+        img.save("textures/" + self._ticker + "_" + self._period + "OCH_bw_"  + _prefix + "_" + _dt +".png");
         
 
 obj = DrawImage(512, "ORCL") # NVDA, ABNB
 obj.getValues()
-obj.draw();
+obj.drawRGBA(red='Open', green='Close', blue='High', alpha='Low');
