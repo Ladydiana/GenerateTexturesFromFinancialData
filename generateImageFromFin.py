@@ -29,7 +29,16 @@ class HistoricalData:
         # Show info
         
         
-         
+class Utils:
+
+    def getCurrentTime():
+        datetime.now().strftime('%H%M%S')
+
+    def getCurrentDate():
+        datetime.now().strftime('%Y%m%d')
+
+    def getCurrentDatetime():
+        return datetime.now().strftime('%Y%m%d%H%M%S')         
     
 
 class DrawImage(HistoricalData):
@@ -48,8 +57,10 @@ class DrawImage(HistoricalData):
     def getValues(self):
         print("Ticker: ", self._ticker, "; Image Size: ", self._size);
         print(self._data.info())
+        
 
     def draw(self):
+        _dt = Utils.getCurrentDatetime()
         for r in range(0, self._size):
             for c in range(0, self._size):
                 #print( data['Open'][r], data['Close'][c], data['High'][r] )
@@ -57,9 +68,11 @@ class DrawImage(HistoricalData):
                 gr = self._data['Close'][c]
                 bl = self._data['High'][r]#365#data['Close'][r]
                 self._img[r][c]=[re,gr,bl]
-        img = Image.fromarray(self._img, 'RGB').convert("L")
+        img = Image.fromarray(self._img, 'RGB')
+        img.save("textures/" + _dt + "_color" + ".jpeg")
+        img = img.convert("L")
         img.show()
-        img.save("randomFin_" + datetime.now().strftime('%Y%m%d%H%M%S') +".jpeg");
+        img.save("textures/" + _dt + "_bw" +".jpeg");
         
 
 obj = DrawImage(512, "NVDA")
