@@ -92,5 +92,5 @@ class DrawImage(HistoricalData):
 
 obj = DrawImage(512, "ORCL") # NVDA, ABNB
 obj.getValues()
-obj.draw(red='Open', green='Close', blue='High', alpha='Low', rgba=True);
-obj.draw(red='Open', green='Close', blue='High', alpha='Low', rgba=False);
+#obj.draw(red='Open', green='Close', blue='High', alpha='Low', rgba=True);
+obj.draw(red='Open', green='Close', blue='High', alpha= '', rgba=False);
