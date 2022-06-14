@@ -50,7 +50,7 @@ class DrawImage(HistoricalData):
     # constructor
     def __init__(self, size, ticker): 
         self._imgSize = int(size/2)
-        self._img = np.array(Image.new("RGBA", (self._imgSize,self._imgSize)))
+        
         HistoricalData.__init__(self, ticker, str(size)+"d") 
         self.loadData()
     
@@ -59,9 +59,14 @@ class DrawImage(HistoricalData):
         print(self._data.info())
         
 
-    def drawRGBA(self, red, green, blue, alpha):
+    def draw(self, red, green, blue, alpha, rgba):
         _dt = Utils.getCurrentDatetime()
-        _prefix = "RGBA"
+        if(rgba): 
+            _prefix = "RGBA"
+            self._img = np.array(Image.new("RGBA", (self._imgSize,self._imgSize)))
+        else: 
+            _prefix="RGB"
+            self._img = np.array(Image.new("RGB", (self._imgSize,self._imgSize)))
         for r in range(0, self._imgSize):
             for c in range(0, self._imgSize):
                 #print( data['Open'][r], data['Open'][c],data['Close'][c], data['High'][r] )
@@ -69,9 +74,15 @@ class DrawImage(HistoricalData):
                 re = self._data[red][r+c]
                 gr = self._data[green][r+c]
                 bl = self._data[blue][r+c]#365#data['Close'][r]
-                a = self._data[alpha][r+c]#365#data['Close'][r]
-                self._img[r][c]=[re,gr,bl, a]
-        img = Image.fromarray(self._img, 'RGBA')
+                if(rgba):
+                    a = self._data[alpha][r+c]#365#data['Close'][r]
+                    self._img[r][c]=[re,gr,bl, a]
+                else:
+                    self._img[r][c]=[re,gr,bl]
+        if(rgba):
+            img = Image.fromarray(self._img, 'RGBA')
+        else:
+             img = Image.fromarray(self._img, 'RGB')
         
         img.save("textures/" +  self._ticker + "_" + self._period + "OCH_color_" + _prefix + "_" + _dt + ".png") #OCH = Open Close High
         img = img.convert("L")
@@ -81,4 +92,5 @@ class DrawImage(HistoricalData):
 
 obj = DrawImage(512, "ORCL") # NVDA, ABNB
 obj.getValues()
-obj.drawRGBA(red='Open', green='Close', blue='High', alpha='Low');
+obj.draw(red='Open', green='Close', blue='High', alpha='Low', rgba=True);
+obj.draw(red='Open', green='Close', blue='High', alpha='Low', rgba=False);
