@@ -38,7 +38,9 @@ class Utils:
         datetime.now().strftime('%Y%m%d')
 
     def getCurrentDatetime():
-        return datetime.now().strftime('%Y%m%d%H%M%S')         
+        return datetime.now().strftime('%Y%m%d%H%M%S')    
+
+    dictHeaders = dict(O='Open', C='Close', H='High', L='Low', V='Volume', D='Dividends', S='Stock Splits')     
     
 
 class DrawImage(HistoricalData):
@@ -89,7 +91,7 @@ class DrawImage(HistoricalData):
         img.show()
         img.save("textures/" + self._ticker + "_" + self._period + "OCH_bw_"  + _prefix + "_" + _dt +".png");
         
-
+print(Utils.dictHeaders)
 obj = DrawImage(512, "ORCL") # NVDA, ABNB
 obj.getValues()
 #obj.draw(red='Open', green='Close', blue='High', alpha='Low', rgba=True);
